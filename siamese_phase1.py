@@ -98,18 +98,18 @@ def prepare_initial_triplets(directory):
         # Paths for mix, reverb, and impulse response within a_entity and b_entity
         a_mix = os.path.join(a_entity_path, f"{class_id}_a_mix.npy")
         a_reverb = os.path.join(a_entity_path, f"{class_id}_a_reverb.npy")
-        a_impulse = os.path.join(a_entity_path, f"{class_id}_impulse_response.npy")
+        b_impulse = os.path.join(b_entity_path, f"{class_id}_impulse_response.npy")
         b_mix = os.path.join(b_entity_path, f"{class_id}_b_mix.npy")
         b_reverb = os.path.join(b_entity_path, f"{class_id}_b_reverb.npy")
-        b_impulse = os.path.join(b_entity_path, f"{class_id}_impulse_response.npy")
+        #b_impulse = os.path.join(b_entity_path, f"{class_id}_impulse_response.npy")
 
         # Generate triplets for a_entity
         if os.path.isfile(a_mix) and os.path.isfile(a_reverb):
             negative_sample = get_random_negative_sample(directory, class_id)
             initial_triplets.append((a_mix, a_reverb, negative_sample))
-        if os.path.isfile(a_mix) and os.path.isfile(a_impulse):
+        if os.path.isfile(a_mix) and os.path.isfile(b_impulse):
             negative_sample = get_random_negative_sample(directory, class_id)
-            initial_triplets.append((a_mix, a_impulse, negative_sample))
+            initial_triplets.append((a_mix, b_impulse, negative_sample))
         if os.path.isfile(a_mix) and os.path.isfile(b_mix):
             negative_sample = get_random_negative_sample(directory, class_id)
             initial_triplets.append((a_mix, b_mix, negative_sample))
@@ -128,7 +128,7 @@ def prepare_initial_triplets(directory):
             negative_sample = get_random_negative_sample(directory, class_id)
             initial_triplets.append((b_mix, a_reverb, negative_sample))
 
-    #print("All triplets are generated: ", len(initial_triplets))
+    print("All triplets are generated: ", len(initial_triplets))
     #print(len(initial_triplets))
     return initial_triplets
 
@@ -278,7 +278,7 @@ class SiameseNetwork(nn.Module):
 
     def _get_flat_feature_size(self):
         # Set the input shape directly here
-        dummy_input = torch.zeros(1, 1, 128, 4113)  # Updated size
+        dummy_input = torch.zeros(1, 1, 128, 4119)  # Updated size
         dummy_output = self.pool2(self.conv2(self.pool1(self.conv1(dummy_input))))
         return int(torch.prod(torch.tensor(dummy_output.size()[1:])))
 

@@ -90,7 +90,7 @@ class PairwiseDataset(Dataset):
         if self.transform:
             anchor = self.transform(anchor)
             positive = self.transform(positive)
-        print(f"Returning from __getitem__: {anchor.shape}, {positive.shape}, {label}")
+        #print(f"Returning from __getitem__: {anchor.shape}, {positive.shape}, {label}")
         return anchor, positive, torch.tensor(label, dtype=torch.float32)
 
 
@@ -179,7 +179,7 @@ class SiameseNetwork(nn.Module):
 
     def _get_flat_feature_size(self):
         # Set the input shape directly here
-        dummy_input = torch.zeros(1, 1, 128, 4113)  # Updated size
+        dummy_input = torch.zeros(1, 1, 128, 4119)  # Updated size
         dummy_output = self.pool2(self.conv2(self.pool1(self.conv1(dummy_input))))
         return int(torch.prod(torch.tensor(dummy_output.size()[1:])))
 
@@ -254,7 +254,6 @@ def main():
     # DataLoader setup
     test_dataset = PairwiseDataset(test_pairs, test_labels, transform=transform)
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False, num_workers=4)
-    print("ddd")
     # Training loop
     best_loss = float('inf')
     early_stopping_counter = 0
